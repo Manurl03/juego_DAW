@@ -16,6 +16,7 @@ function añadirFichaAleatoria() {
   juego.forEach((fila, i) => {
     fila.forEach((celda, j) => {
       if (celda === 0) fichasVacias.push({ x: i, y: j });
+      console.log(fichasVacias);
     });
   });
 
@@ -83,7 +84,7 @@ function mover(direccion) {
   if (movido) {
     añadirFichaAleatoria();
     renderizarJuego();
-    if (esFinDelJuego()) alert('¡Juego terminado!');
+    if (esFinDelJuego()) document.getElementById('contenedorJuegoPerdido').style.display = 'flex';
   }
 }
 
