@@ -1,13 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake</title>
-    <link rel="stylesheet" href="estilo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2048</title>
+  <style>
+    .contenedor-juego {
+      margin: 40px auto;
+      width: 600px;
+      height: 600px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 10px;
+      background-color: #bbada0;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .ficha {
+      width: 140px;
+      height: 140px;
+      background-color: #cdc1b4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      color: #776e65;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+    .ficha[data-value="2"] { background-color: lightgray; }
+    .ficha[data-value="4"] { background-color: lightblue; }
+    .ficha[data-value="8"] { background-color: lightgreen; }
+    .ficha[data-value="16"] { background-color: lightpink; }
+    .ficha[data-value="32"] { background-color: lightyellow; }
+    .ficha[data-value="64"] { background-color: lightcoral; }
+    .ficha[data-value="128"] { background-color: lightsalmon; }
+    .ficha[data-value="256"] { background-color: lightskyblue; }
+    .ficha[data-value="512"] { background-color: lightslategrey; }
+    .ficha[data-value="1024"] { background-color: lightgrey; }
+    .ficha[data-value="2048"] { background-color: lightseagreen; }
+  </style>
 </head>
-<body>
-    
-    <script src="app.js"></script>
+<body style="text-align: center;">
+  <h1>2048</h1>
+  <p>Usa las teclas de flecha para mover las fichas.</p>
+  <div class="contenedor-juego" id="contenedorJuego"></div>
+  <script src="script.js"></script>
 </body>
 </html>
