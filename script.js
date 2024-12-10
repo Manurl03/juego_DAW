@@ -6,23 +6,35 @@ let puntuacionActual = 0;
 let mejorPuntuacion = 0;
 let fichasElementos = [];
 
+/**
+ * Calcula si la puntuación actual es superior a la mejor y si es así la cambia
+ */
 function actualizarPuntuaciones() {
   if (puntuacionActual > mejorPuntuacion) {
     mejorPuntuacion = puntuacionActual;
   }
-  document.querySelector('.puntuacion p:nth-child(1)').textContent = `Puntuación: ${puntuacionActual}`;
-  document.querySelector('.puntuacion p:nth-child(2)').textContent = `Mejor Puntuación: ${mejorPuntuacion}`;
+  document.getElementById('puntuacion').innerHTML = `Puntuación: ${puntuacionActual}`;
+  document.getElementById('mejorPuntuacion').innerHTML = `Mejor Puntuación: ${mejorPuntuacion}`;
 }
 
+/**
+ * Quita la pantalla de perdido, resetea la puntuación actual y crea grid del juego en función a la variable tamaño
+ */
 function inicializarJuego() {
   document.getElementById('contenedorJuegoPerdido').style.display = 'none';
   puntuacionActual = 0;
   actualizarPuntuaciones();
-  juego = Array(tamañoJuego)
-    .fill(null)
-    .map(() => Array(tamañoJuego).fill(0));
+  juego = [];
+  for (let i = 0; i < tamañoJuego; i++) {
+    let fila = [];
+    for (let j = 0; j < tamañoJuego; j++) {
+      fila.push(0);
+    }
+    juego.push(fila);
+  }
   añadirFichaAleatoria();
   añadirFichaAleatoria();
+  
   renderizarJuego();
 }
 
@@ -34,7 +46,10 @@ function añadirFichaAleatoria() {
     });
   });
   if (fichasVacias.length === 0) return;
-  var { x, y } = fichasVacias[Math.floor(Math.random() * fichasVacias.length)];
+  var fichaAleatoria = fichasVacias[Math.floor(Math.random() * fichasVacias.length)];
+  var x = fichaAleatoria.x;
+  var y = fichaAleatoria.y;
+
   juego[x][y] = Math.random() < 0.5 ? 2 : 4;
 }
 
@@ -62,11 +77,15 @@ function mover(direccion) {
   let cambios = [];
 
   for (let i = 0; i < tamañoJuego; i++) {
-    let fila = juego[i];
+    let fila = [];
     if (direccion === 'arriba' || direccion === 'abajo') {
-      fila = juego.map(f => f[i]);
+      for (let j = 0; j < tamañoJuego; j++) {
+        fila.push(juego[j][i]);
+      }
+    } else {
+      fila = [...juego[i]]; 
     }
-    var filaFiltrada = fila.filter(v => v !== 0);
+    var filaFiltrada = fila.filter(elemento => elemento !== 0);
     var nuevaFila = [];
 
     for (let j = 0; j < filaFiltrada.length; j++) {
@@ -106,13 +125,15 @@ function mover(direccion) {
     añadirFichaAleatoria();
     renderizarJuego();
     actualizarPuntuaciones();
-    cambios.forEach(({ fila, columna }) => {
+    for (let i = 0; i < cambios.length; i++) {
+      let { fila, columna } = cambios[i];
       var ficha = fichasElementos[fila * tamañoJuego + columna];
       if (ficha) {
         ficha.classList.add('animada');
         setTimeout(() => ficha.classList.remove('animada'), 200);
       }
-    });
+    }
+    
     if (esFinDelJuego()) document.getElementById('contenedorJuegoPerdido').style.display = 'flex';
   }
 }
