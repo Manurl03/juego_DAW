@@ -1,8 +1,23 @@
-const tamañoJuego = 4;
-const contenedor = document.getElementById('contenedorJuego');
+var tamañoJuego = 4;
+var contenedor = document.getElementById('contenedorJuego');
+
 let juego = [];
+let puntuacionActual = 0;
+let mejorPuntuacion = 0;
+let fichasElementos = [];
+
+function actualizarPuntuaciones() {
+  if (puntuacionActual > mejorPuntuacion) {
+    mejorPuntuacion = puntuacionActual;
+  }
+  document.querySelector('.puntuacion p:nth-child(1)').textContent = `Puntuación: ${puntuacionActual}`;
+  document.querySelector('.puntuacion p:nth-child(2)').textContent = `Mejor Puntuación: ${mejorPuntuacion}`;
+}
 
 function inicializarJuego() {
+  document.getElementById('contenedorJuegoPerdido').style.display = 'none';
+  puntuacionActual = 0;
+  actualizarPuntuaciones();
   juego = Array(tamañoJuego)
     .fill(null)
     .map(() => Array(tamañoJuego).fill(0));
@@ -12,51 +27,53 @@ function inicializarJuego() {
 }
 
 function añadirFichaAleatoria() {
-  const fichasVacias = [];
+  var fichasVacias = [];
   juego.forEach((fila, i) => {
     fila.forEach((celda, j) => {
       if (celda === 0) fichasVacias.push({ x: i, y: j });
-      console.log(fichasVacias);
     });
   });
-
   if (fichasVacias.length === 0) return;
-
-  const { x, y } = fichasVacias[Math.floor(Math.random() * fichasVacias.length)];
+  var { x, y } = fichasVacias[Math.floor(Math.random() * fichasVacias.length)];
   juego[x][y] = Math.random() < 0.5 ? 2 : 4;
 }
 
 function renderizarJuego() {
   contenedor.innerHTML = '';
+  fichasElementos = [];
   juego.forEach(fila => {
     fila.forEach(valor => {
-      const ficha = document.createElement('div');
+      var ficha = document.createElement('div');
       ficha.className = 'ficha';
       if (valor) {
         ficha.textContent = valor;
         ficha.setAttribute('data-value', valor);
+        ficha.classList.add('animada');
+        setTimeout(() => ficha.classList.remove('animada'), 200);
       }
       contenedor.appendChild(ficha);
+      fichasElementos.push(ficha);
     });
   });
 }
 
 function mover(direccion) {
   let movido = false;
+  let cambios = [];
 
   for (let i = 0; i < tamañoJuego; i++) {
     let fila = juego[i];
     if (direccion === 'arriba' || direccion === 'abajo') {
       fila = juego.map(f => f[i]);
     }
-
-    const filaFiltrada = fila.filter(v => v !== 0);
-    const nuevaFila = [];
+    var filaFiltrada = fila.filter(v => v !== 0);
+    var nuevaFila = [];
 
     for (let j = 0; j < filaFiltrada.length; j++) {
       if (filaFiltrada[j] === filaFiltrada[j + 1]) {
         nuevaFila.push(filaFiltrada[j] * 2);
-        j++; 
+        puntuacionActual += filaFiltrada[j] * 2;
+        j++;
       } else {
         nuevaFila.push(filaFiltrada[j]);
       }
@@ -74,16 +91,28 @@ function mover(direccion) {
       for (let j = 0; j < tamañoJuego; j++) {
         if (juego[j][i] !== nuevaFila[j]) movido = true;
         juego[j][i] = nuevaFila[j];
+        if (nuevaFila[j] !== 0) cambios.push({ fila: j, columna: i, valor: nuevaFila[j] });
       }
     } else {
       if (juego[i].toString() !== nuevaFila.toString()) movido = true;
       juego[i] = nuevaFila;
+      for (let j = 0; j < tamañoJuego; j++) {
+        if (nuevaFila[j] !== 0) cambios.push({ fila: i, columna: j, valor: nuevaFila[j] });
+      }
     }
   }
 
   if (movido) {
     añadirFichaAleatoria();
     renderizarJuego();
+    actualizarPuntuaciones();
+    cambios.forEach(({ fila, columna }) => {
+      var ficha = fichasElementos[fila * tamañoJuego + columna];
+      if (ficha) {
+        ficha.classList.add('animada');
+        setTimeout(() => ficha.classList.remove('animada'), 200);
+      }
+    });
     if (esFinDelJuego()) document.getElementById('contenedorJuegoPerdido').style.display = 'flex';
   }
 }

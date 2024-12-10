@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2048</title>
   <style>
-    .botonEmpezar{
+    .botonEmpezar {
       height: 50px;
       width: 120px;
       background-color: #b9afa0;
@@ -14,12 +14,14 @@
       font-style: bold;
       border-radius: 10px;
     }
-    .botonEmpezar:hover{
+
+    .botonEmpezar:hover {
       background: #999185;
       cursor: pointer;
     }
+
     .contenedorJuego {
-      margin: 40px auto;
+      margin: 30px auto;
       width: 600px;
       height: 600px;
       display: grid;
@@ -28,34 +30,39 @@
       background-color: #b9afa0;
       padding: 10px;
       border-radius: 10px;
+      position: relative;
     }
+
     .contenedorJuegoPerdido {
       position: absolute;
-      top: 204px;
-      left: 650px;
+      top: 193.5px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 600px;
       height: 600px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 10px;
-      background-color: rgba(0, 0, 0, 0.50);
-      color: white;
       padding: 10px;
       border-radius: 10px;
       display: none;
+      background-color: rgba(0, 0, 0, 0.50);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
     .contenedorJuegoPerdido p {
-      width: 600px;
       font-size: 80px;
-      margin: auto;
+      margin: 0;
       text-align: center;
     }
-    .puntuacion{
+
+    .puntuacion {
       display: flex;
       gap: 20px;
       justify-content: center;
     }
-    .puntuacion p{
+
+    .puntuacion p {
       border-radius: 10px;
       width: 200px;
       height: 40px;
@@ -63,6 +70,7 @@
       padding-top: 20px;
       font-style: bold;
     }
+
     .ficha {
       width: 140px;
       height: 140px;
@@ -73,18 +81,33 @@
       font-size: 24px;
       color: #776e65;
       border-radius: 5px;
+      transition: transform 0.1s ease, background-color 0.1s ease; 
     }
-    .ficha[data-value="2"] { background-color: lightgray; }
-    .ficha[data-value="4"] { background-color: lightblue; }
-    .ficha[data-value="8"] { background-color: lightgreen; }
-    .ficha[data-value="16"] { background-color: lightpink; }
-    .ficha[data-value="32"] { background-color: lightyellow; }
-    .ficha[data-value="64"] { background-color: lightcoral; }
-    .ficha[data-value="128"] { background-color: lightsalmon; }
-    .ficha[data-value="256"] { background-color: lightskyblue; }
-    .ficha[data-value="512"] { background-color: lightslategrey; }
-    .ficha[data-value="1024"] { background-color: lightgrey; }
-    .ficha[data-value="2048"] { background-color: lightseagreen; }
+
+    .ficha.animada {
+      animation: moverFicha 0.2s ease;
+    }
+
+    @keyframes moverFicha {
+      from {
+        transform: scale(0.9);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
+
+.ficha[data-value="2"] { background-color: lightgray; }
+.ficha[data-value="4"] { background-color: lightblue; }
+.ficha[data-value="8"] { background-color: lightgreen; }
+.ficha[data-value="16"] { background-color: lightpink; }
+.ficha[data-value="32"] { background-color: lightyellow; }
+.ficha[data-value="64"] { background-color: lightcoral; }
+.ficha[data-value="128"] { background-color: lightsalmon; }
+.ficha[data-value="256"] { background-color: lightskyblue; }
+.ficha[data-value="512"] { background-color: lightslategrey; }
+.ficha[data-value="1024"] { background-color: lightgrey; }
+.ficha[data-value="2048"] { background-color: lightseagreen; }
   </style>
 </head>
 <body style="text-align: center; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
