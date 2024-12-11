@@ -38,6 +38,9 @@ function inicializarJuego() {
   renderizarJuego();
 }
 
+/**
+ * Añade una ficha en un hueco vacío
+ */
 function añadirFichaAleatoria() {
   var fichasVacias = [];
   juego.forEach((fila, i) => {
@@ -52,7 +55,9 @@ function añadirFichaAleatoria() {
 
   juego[x][y] = Math.random() < 0.5 ? 2 : 4;
 }
-
+/**
+ * Añade todas las fichas al tablero y anima el movimiento de la ficha
+ */
 function renderizarJuego() {
   contenedor.innerHTML = '';
   fichasElementos = [];
@@ -72,6 +77,10 @@ function renderizarJuego() {
   });
 }
 
+/**
+ * Movimiento de todas las fichas en una dirección dependiendo del switch
+ * y calcula si hay una ficha del mismo número en el trayecto, la suma.
+ */
 function mover(direccion) {
   let movido = false;
   let cambios = [];
@@ -137,7 +146,9 @@ function mover(direccion) {
     if (esFinDelJuego()) document.getElementById('contenedorJuegoPerdido').style.display = 'flex';
   }
 }
-
+/**
+ * Calcula si es el fin del juego al no poder mover niguna ficha
+ */
 function esFinDelJuego() {
   for (let i = 0; i < tamañoJuego; i++) {
     for (let j = 0; j < tamañoJuego; j++) {
@@ -149,6 +160,10 @@ function esFinDelJuego() {
   return true;
 }
 
+
+/**
+ * Menú para la función moer
+ */
 document.addEventListener('keydown', evento => {
   switch (evento.key) {
     case 'ArrowUp':
